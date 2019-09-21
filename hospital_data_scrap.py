@@ -9,7 +9,6 @@ import xlwt
 
 class web_site:
 
-    #对象初始化
     def __init__(self):
         url = 'http://oa.n-huashan.org.cn:58888/OADemo/Index.aspx'
         self.url = url
@@ -31,13 +30,8 @@ class web_site:
     def iterate_over_date(self):
         #TODO Now only iterate over September
         dates = self.date_generator()
-        # dates = [['2018-09-16'], ['2019-09-16', '2019-09-17']]
         workbook = xlwt.Workbook()
-        # sheet = workbook.add_sheet("sheet_name") 
-        # for each_date in dates:
-        #     self.search(each_date)
-        #     self.parse_data(each_date, sheet)
-        # workbook.save("D:\\code\\data.xls")
+
 
         for dates_per_year in dates:
             sheet = workbook.add_sheet(dates_per_year[0][0:4])
@@ -99,16 +93,9 @@ class web_site:
                 self.row_to_append+=1
 
 
-    # def save_data(self):
-        
-
-
-
 if __name__ == "__main__":
     
-
-    chromedriver_path = "C:\\Users\\jiasu\\Downloads\\chromedriver_win32\\chromedriver.exe" 
-
+    # chromedriver_path = "C:\\Users\\jiasu\\Downloads\\chromedriver_win32\\chromedriver.exe" 
     a = web_site()
     a.login() 
     a.iterate_over_date()
