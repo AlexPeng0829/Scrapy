@@ -26,16 +26,20 @@ class web_site:
     def login(self):
         self.browser.get(self.url)
 
+    def add_sheet(self, workbook, dates):
+        year_name = dates[0][0:4]
+        sheet = workbook.add_sheet(year_name)
+        self.row_to_append = 0
+        self.header_exist = False
+        return sheet
 
     def iterate_over_date(self):
         #TODO Now only iterate over September
         dates = self.date_generator()
         workbook = xlwt.Workbook()
 
-
         for dates_per_year in dates:
-            sheet = workbook.add_sheet(dates_per_year[0][0:4])
-            self.header_exist = False
+            sheet = self.add_sheet(workbook, dates_per_year)
             for each_date in dates_per_year:
                 self.search(each_date)
                 self.parse_data(each_date, sheet)
@@ -72,30 +76,26 @@ class web_site:
         soup = BeautifulSoup(self.browser.page_source,'lxml')
         tables = soup.find_all("table")
         tab_with_real_data = tables[1]
-
+        
+        data = list()
         if self.header_exist == False:
-            for tr in tab_with_real_data.findAll('tr'):
-                sheet.write(self.row_to_append, 0, search_date)
-                col = 1
-                for td in tr.findAll('td'):
-                    # print (td.getText())
-                    sheet.write(self.row_to_append, col, td.getText())
-                    col+=1
-                self.row_to_append+=1
-            self.header_exist = True
+            data = tab_with_real_data.findAll('tr')
         else:
-            for tr in tab_with_real_data.findAll('tr')[1:]:
-                sheet.write(self.row_to_append, 0, search_date)
-                col = 1
-                for td in tr.findAll('td'):
-                    sheet.write(self.row_to_append, col, td.getText())
-                    col+=1
-                self.row_to_append+=1
+            data = tab_with_real_data.findAll('tr')[1:]
+
+        for tr in data:
+            sheet.write(self.row_to_append, 0, search_date)
+            col = 1
+            for td in tr.findAll('td'):
+                sheet.write(self.row_to_append, col, td.getText())
+                col+=1
+            self.row_to_append+=1
+        self.header_exist = True        
 
 
 if __name__ == "__main__":
     
-    # chromedriver_path = "C:\\Users\\jiasu\\Downloads\\chromedriver_win32\\chromedriver.exe" 
+    chromedriver_path = "C:\\Users\\jiasu\\Downloads\\chromedriver_win32\\chromedriver.exe" 
     a = web_site()
     a.login() 
     a.iterate_over_date()
