@@ -16,11 +16,11 @@ class web_site:
         self.header_exist = False
 
         options = webdriver.ChromeOptions()
-        options.add_experimental_option("prefs", {"profile.managed_default_content_settings.images": 2}) # 不加载图片,加快访问速度
-        options.add_experimental_option('excludeSwitches', ['enable-automation']) # 此步骤很重要，设置为开发者模式，防止被各大网站识别出来使用了Selenium
+        options.add_experimental_option("prefs", {"profile.managed_default_content_settings.images": 2})
+        options.add_experimental_option('excludeSwitches', ['enable-automation']) 
 
         self.browser = webdriver.Chrome(executable_path=chromedriver_path, options=options)
-        self.wait = WebDriverWait(self.browser, 10) #超时时长为10s
+        # self.wait = WebDriverWait(self.browser, 10) #超时时长为10s
 
 
     def login(self):
@@ -95,7 +95,7 @@ class web_site:
 
 if __name__ == "__main__":
     
-    chromedriver_path = "C:\\Users\\jiasu\\Downloads\\chromedriver_win32\\chromedriver.exe" 
+    # chromedriver_path = "C:\\Users\\jiasu\\Downloads\\chromedriver_win32\\chromedriver.exe" 
     a = web_site()
     a.login() 
     a.iterate_over_date()
