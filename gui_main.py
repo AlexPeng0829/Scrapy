@@ -1,5 +1,10 @@
 from tkinter import *
 from hospital_data_scrap import scrap_data
+import datetime
+
+def get_current_date():
+    current_date = datetime.datetime.today().strftime('%Y-%m-%d')
+    return str(current_date)
 
 class Gui_Window(Tk):
     def __init__(self):
@@ -18,8 +23,8 @@ class Gui_Window(Tk):
         Label(self.master, text = '预计时间：').grid(row = 4, column = 0, padx = 5, pady =5)
 
 
-        v1 = StringVar(self.master, '2018-01-01')
-        v2 = StringVar(self.master, '2019-10-01')
+        v1 = StringVar(self.master, '2019-01-01')
+        v2 = StringVar(self.master, get_current_date())
         v3 = StringVar(self.master, 'D:\\code\\data.xls')
         v4 = StringVar(self.master)
         v5 = StringVar(self.master)
