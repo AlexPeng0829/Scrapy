@@ -9,7 +9,7 @@ class HeaderNotExistException(Exception):
 
 
 class Excel_processer():
-    
+
     def __init__(self, input_path_, header_row_num_, max_col_limit_ = 30, max_row_limit_ = 100):
 
         self.input_path = input_path_
@@ -20,7 +20,7 @@ class Excel_processer():
         self.header_row_num = header_row_num_
         self.row_to_append = 0
 
-    def empty_string(self, intput_str):
+    def is_blank_string(self, intput_str):
         if intput_str == '':
             return True
         for each_char in intput_str:
@@ -29,23 +29,23 @@ class Excel_processer():
         return True
 
     def write_header(self, cols, input_sheet, output_sheet):
-        if self.empty_string(input_sheet.cell_value(0,0)):
+        if self.is_blank_string(input_sheet.cell_value(0,0)):
             raise HeaderNotExistException("Header of first excel file dosen't exist... Quitting！")
         for each_row in range(self.header_row_num):
             for each_col in range(cols):
                 output_sheet.write(each_row, each_col, input_sheet.cell_value(each_row, each_col))
             self.row_to_append += 1
         self.header_exist_flag = True
-    
+
     def read_excel(self, file_name, input_sheet, output_sheet):
 
         rows = min(input_sheet.nrows, self.max_row_limit)
         cols = min(input_sheet.ncols, self.max_col_limit)
-        
+
         if self.header_exist_flag == False:
             self.write_header(cols, input_sheet, output_sheet)
 
-        for each_row in range(self.header_row_num, rows): 
+        for each_row in range(self.header_row_num, rows):
             for each_col in range(1, cols):
                 print(input_sheet.cell_value(each_row, each_col))
                 each_cell_value = input_sheet.cell_value(each_row, each_col)
@@ -74,7 +74,7 @@ class Excel_processer():
 
 
 def main():
-    
+
     input_path = "D:\\tmp\\静中心手术量\\2019test"
     # input_path = "D:\\tmp\\静中心手术量\\2019"
     output_file = os.path.join(input_path, "overall.xls")
@@ -97,7 +97,7 @@ def main():
             input_sheet = input_book.sheet_by_name('Sheet1')
             excel_processer.read_excel(each_day, input_sheet, output_sheet)
             # rename_file_name(each_day_base_path, each_day)
-             
+
     output_workbook.save(output_file)
 
 if __name__ == "__main__":

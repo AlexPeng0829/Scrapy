@@ -1,2 +1,2 @@
 # Scrapy
-some python scripts for scrapping
+Some python scripts for scrapping data related to the daily surgical operations of a certain hospital.
