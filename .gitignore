@@ -1,1 +1,4 @@
-*.pyc
+*.py
+.vscode/*
+__pycache__/*
+

@@ -1,3 +1,4 @@
+# coding=utf-8
 from tkinter import *
 from hospital_data_scrap import scrap_data
 import datetime
