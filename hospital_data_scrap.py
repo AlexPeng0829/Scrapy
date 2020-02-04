@@ -54,7 +54,7 @@ class web_site:
         Date = namedtuple('Date',['Year', 'Month', 'Day'])
         start_date = Date(int(_start_date.split('-')[0]), int(_start_date.split('-')[1]), int(_start_date.split('-')[2]))
         end_date = Date(int(_end_date.split('-')[0]), int(_end_date.split('-')[1]), int(_end_date.split('-')[2]))
-        
+
         begin_month_flag = True
         begin_day_flag = True
 
@@ -64,7 +64,7 @@ class web_site:
                 end_month = end_date.Month
             else:
                 end_month = 12
-            
+
             if begin_month_flag:
                 start_month = start_date.Month
                 begin_month_flag = False
@@ -88,25 +88,24 @@ class web_site:
                     begin_day_flag = False
                 else:
                     start_day = 1
-                
                 for day in range(start_day, end_day + 1):
                     date = str(year) + '-' + str(month).rjust(2, '0') + '-' + str(day).rjust(2, '0')
                     dates_per_year.append(date)
             dates.append(dates_per_year)
         return dates
-                
+
     def search(self, search_date):
         self.browser.find_element_by_id('txtRQ').clear()
         self.browser.find_element_by_id('txtRQ').send_keys(search_date)
         self.browser.find_element_by_name("ddlSSLC").send_keys("手术室、门诊手术室")
         self.browser.find_element_by_name("Btn_Search").click()
 
-    
+
     def parse_data(self, search_date, sheet):
         soup = BeautifulSoup(self.browser.page_source,'lxml')
         tables = soup.find_all("table")
         tab_with_real_data = tables[1]
-        
+
         data = list()
         if self.header_exist == False:
             data = tab_with_real_data.findAll('tr')
@@ -114,18 +113,21 @@ class web_site:
             data = tab_with_real_data.findAll('tr')[1:]
 
         for tr in data:
-            sheet.write(self.row_to_append, 0, search_date)
+            if self.row_to_append == 0:
+                sheet.write(self.row_to_append, 0, "日期")
+            else:
+                sheet.write(self.row_to_append, 0, search_date)
             col = 1
             for td in tr.findAll('td'):
                 sheet.write(self.row_to_append, col, td.getText())
                 col+=1
             self.row_to_append+=1
-        self.header_exist = True        
+        self.header_exist = True
 
 def scrap_data(start_date=None, end_date=None, stored_dir = None):
-    # chromedriver_path = "C:\\Users\\jiasu\\Downloads\\chromedriver_win32\\chromedriver.exe" 
+    # chromedriver_path = "C:\\Users\\jiasu\\Downloads\\chromedriver_win32\\chromedriver.exe"
     a = web_site(stored_dir)
-    a.login() 
+    a.login()
     a.iterate_over_date(start_date, end_date)
 
 def main():
